@@ -1,6 +1,10 @@
 import{mkdirSync as M,readdirSync as R,readFileSync as F,writeFileSync as W}from"node:fs";
+// Opcode metadata, one char per opcode 0..83: value = charCode-48, imm = value>>4, pops = (value>>2)&3, pushes = value&3.
 const T='0Aq46:;?~~~~~~~~999999959995999~999~~~~~~~~~~~~~PTTP0~~~~~~~~~~~58~~~~~~~~~~~~~~4414';
 const A=[(a,b)=>a+b|0,(a,b)=>a-b|0,Math.imul,(a,b)=>a/b|0,(a,b)=>a%b|0,(a,b)=>(a>>>0)/(b>>>0)|0,(a,b)=>(a>>>0)%(b>>>0)|0,0,(a,b)=>a&b,(a,b)=>a|b,(a,b)=>a^b,0,(a,b)=>a<<b,(a,b)=>a>>b,(a,b)=>a>>>b|0,0,(a,b)=>a==b?1:0,(a,b)=>a<b?1:0,(a,b)=>(a>>>0)-(b>>>0)<0?1:0];
+// Traps and their exit codes: 2 stack underflow, 3 stack overflow, 4 div/mod by zero,
+// 5 bad opcode, 6 bad memory address, 7 call depth, 8 empty RET, 9 truncated PC/immediate,
+// 10 step limit (1e6), 11 output limit (65536 bytes). 0 = clean halt.
 function run(p,q){
 let D=new Int32Array(512),C=new Int32Array(64),O=new Uint8Array(65536),s=0,c=0,o=0,i=0,x=0,n=0,z=p.length;
 let e=t=>[O.slice(0,o),t];
